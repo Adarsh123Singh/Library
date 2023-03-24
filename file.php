@@ -1,5 +1,4 @@
 <?php 
-error_reporting(0);
 include("Details.php"); 
 ?>
 <!doctype html>
@@ -21,48 +20,46 @@ include("Details.php");
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a href="http://localhost:8080/lib/main.php"><input type="submit" value="Back" class="btn btn-light"></a>
-            <span class="navbar mb-0 h1">Enter Book Details</span>
+            <a href="http://localhost:8080/lib/main.php"><input type="submit" value="Back" class="btn btn-dark"></a>
+            <span class="navbar mb-0 h1">Update Book Details</span>
         </div>
     </nav>
     <div class="container">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Upload Image</label>
-                <input type="file" name="uploadfile">
+        <form action="#" method="POST">
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Book Name</label>
-                    <input type="text" class="form-control" name="Bname" >
+                    <input type="text" class="form-control" name="Bname" required>
                 </div>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Book Title</label>
-                    <input type="text" class="form-control" name="Btitle">
+                    <input type="text" class="form-control" name="Btitle" requtred>
                 </div>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Author Name</label>
-                    <input type="text" class="form-control" name="Aname">
+                    <input type="text" class="form-control" name="Aname" required>
                 </div>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Book Type</label>
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example" name="Btype">
+                        <select class="form-select" aria-label="Default select example" name="Btype" required>
                             <option selected></option>
-                            <option value="Fiction">Fiction</option>
-                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="1">Fiction</option>
+                            <option value="2">Non-Fiction</option>
                         </select>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Book Addition</label>
-                    <input type="text" class="form-control" name="Baddition">
+                    <input type="text" class="form-control" name="Baddition" required>
                 </div>
                 <div class="mb-3">
                     <label for="message-text" class="col-form-label">Description/About</label>
-                    <textarea class="form-control" name="Description"></textarea>
+                    <textarea class="form-control" name="Description" required></textarea>
                 </div>
-                <input type="submit" value="Save" class="btn btn-primary" name="submit">
+                <input type="submit" value="Update" class="btn btn-primary" name="submit">
         </form>
     </div>
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -77,15 +74,12 @@ include("Details.php");
 
 </html>
 
+
+
+
 <?php
     if(isset($_POST['submit']))
     {
-
-        $filename = $_FILES["uploadfile"]["name"];
-        $tempname = $_FILES["uploadfile"]["tmp_name"];
-        $folder = "images/".$filename;  
-        move_uploaded_file($tempname,$folder);
-
         $Bname       = $_POST['Bname'];
         $Btitle      = $_POST['Btitle'];
         $Aname       = $_POST['Aname'];
@@ -96,10 +90,10 @@ include("Details.php");
 
 
 if ($Bname !="" && $Btitle !="" && $Aname !=="" && $Btype !="" && $Baddition !="" && $Description !="") {
-    $query = "INSERT INTO library (img_upd, Bname, Btitle, Aname, Btype, BAddition, Description) VALUES ('$folder','$Bname', '$Btitle', '$Aname', '$Btype', '$Baddition', '$Description')";
+    $query = "INSERT INTO library (Bname, Btitle, Aname, Btype, BAddition, Description) VALUES ('$Bname', '$Btitle', '$Aname', '$Btype', '$Baddition', '$Description')";
     $data = mysqli_query($con, $query);
     if ($data) {
-        echo "Data inserted into Database";
+        // echo "Data inserted into Database";
     } else {
         echo "Something Wrong";
     }

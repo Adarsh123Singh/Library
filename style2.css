@@ -1,0 +1,10 @@
+.container{
+    background: lightgoldenrodyellow;
+    align-items: center;
+    margin-top: 100px;
+    border-radius: 15px;
+    text-justify: distribute;
+}
+body{
+    background-color: lightsalmon;
+}

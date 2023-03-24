@@ -28,7 +28,7 @@ $result = mysqli_fetch_assoc($data);
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a href="http://localhost:8080/lib/main.php"><input type="submit" value="Back" class="btn btn-dark"></a>
+            <a href="http://localhost:8080/lib/main.php"><input type="submit" value="Back" class="btn btn-light"></a>
             <span class="navbar mb-0 h1">Update Book Details</span>
         </div>
     </nav>
@@ -37,6 +37,7 @@ $result = mysqli_fetch_assoc($data);
                 <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Upload Image</label>
                     <input type="file" name="uploadfile">
+                    <img src="<?php echo $result['img_upd']; ?>">
                 </div>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Book Name</label>
@@ -99,11 +100,7 @@ $result = mysqli_fetch_assoc($data);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     -->
 </body>
-
 </html>
-
-
-
 
 <?php
     if(isset($_POST['update']))
@@ -113,8 +110,6 @@ $result = mysqli_fetch_assoc($data);
         $tempname = $_FILES["uploadfile"]["tmp_name"];
         $folder = "images/".$filename;  
         move_uploaded_file($tempname,$folder);
-
-
 
         $Bname       = $_POST['Bname'];
         $Btitle      = $_POST['Btitle'];

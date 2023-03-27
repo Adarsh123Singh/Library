@@ -44,8 +44,8 @@
         </div>
     </nav>
     <div class="con">
-        <form class="d-flex" method="GET" action="Search.php">
-            <div class="input-group mb-3 cont1">
+        <form method="GET" action="">
+            <div class="input-group-text mb-3 cont1">
                 <input class="input-group-text" type="search" name="search" placeholder="Search Books">
                 <button class="btn btn-outline-success" name="search" type="submit">Search</button>
             </div>
@@ -81,27 +81,40 @@
 
 <?php
 include('Details.php');
-error_reporting(0);
 $sort_option = "";
+$numberPages = 3;
 
 if (isset($_GET['sort_alphabet'])) {
     if ($_GET['sort_alphabet'] == 'a-z') {
-        $sort_option = "Asc";
+        $sort_option = "ASC";
     } elseif ($_GET['sort_alphabet'] == 'z-a') {
-        $sort_option = "Desc";
+        $sort_option = "DESC";
     }
 }
 
-$query = "SELECT * FROM library ORDER BY Bname $sort_option";
-$data = mysqli_query($con, $query);
-$total = mysqli_num_rows($data);
+if(isset($_GET['page'])){
+    $page = $_GET['page'];
+}else{
+    $page=1;
+}
+$count_query = "SELECT COUNT(*) as count FROM library";
+$count_result = mysqli_query($con, $count_query);
+$count_row = mysqli_fetch_assoc($count_result);
+$total = $count_row['count'];
 
+$num = ceil($total/$numberPages);
+
+$startinglimit = ($page-1)*$numberPages;
+
+$sql = "SELECT * FROM library ORDER BY Bname $sort_option LIMIT $startinglimit,  $numberPages";
+$data = mysqli_query($con, $sql);
+
+for($btn=1;$btn<=$num;$btn++){
+    echo '<button class="btn btn-dark mx-1 my-3"><a href="main.php?page='.$btn.'&sort_alphabet='.$sort_option.'" class="text-light">'.$btn.'</a></button>';
+}
 
 if ($total != 0) {
 ?>
-
-    <h2 align='center'><mark>Table of Library</mark></h2>
-
     <center>
         <table border='3' cellspacing='7' width=93%>
             <tr>
@@ -113,9 +126,8 @@ if ($total != 0) {
                 <th width=10%>Book type</th>
                 <th width=10%>Book Addition</th>
                 <th width=20%>Description</th>
-                <th width=18%>Optimization</th>
+                <th width=18%>Operation</th>
             </tr>
-
         <?php
         $a = 1;
         while ($result = mysqli_fetch_assoc($data)) {
@@ -141,11 +153,9 @@ if ($total != 0) {
     } else {
         echo "No Records Count";
     }
-        ?>
-
-        </table>
-    </center>
-
+?>
+    </table>
+</center>
 
     <script>
         function checkdelete() {

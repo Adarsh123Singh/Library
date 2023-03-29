@@ -44,10 +44,10 @@
         </div>
     </nav>
     <div class="con">
-        <form method="POST">
+        <form method="POST" action="">
             <div class="input-group-text mb-3 cont1">
                 <input class="input-group-text" type="text" name="search" placeholder="Search Books" required>
-                <button class="btn btn-dark" name="submit" type="submit">Search</button>
+                <button class="btn btn-outline-success" name="submit" type="submit">Search</button>
             </div>
         </form>
         <form class="d-flex" method="GET" action="">
@@ -55,9 +55,9 @@
                 <select name="sort_alphabet" class="input-group-text">
                     <option value="">--Select Option</option>
                     <option value="a-z" <?php if (isset($_GET['sort_alphabet']) && $_GET['sort_alphabet'] == 'a-z');
-                    echo "selected"; ?>>A-Z</option>
+                        echo "selected"; ?>>A-Z</option>
                     <option value="z-a" <?php if (isset($_GET['sort_alphabet']) && $_GET['sort_alphabet'] == 'z-a');
-                    echo "selected"; ?>>Z-A</option>
+                        echo "selected"; ?>>Z-A</option>
                 </select>
                 <button class="input-group-text btn btn-light">sort</button>
             </div>
@@ -81,73 +81,23 @@
 
 <?php
 include('Details.php');
-                    error_reporting(0);
-                    $sort_option = "";
-                    $numberPages = 3;
+error_reporting(0);
+$sort_option = "";
+$numberPages = 3;
 
-                    if (isset($_POST['submit'])) {
-                        $search = $_POST['search'];
+if (isset($_POST['submit'])) {
+    $search = $_POST['search'];
+}
 
-                        $sql = "SELECT * FROM library WHERE id like '%$search%' Or Bname like '%$search%' Or Aname like '%$search%'";
-                        $result = mysqli_query($con, $sql);
-                        if ($result) {
-                            $num = mysqli_num_rows($result);
-                            if ($num > 0) {
-                                ?><center>
-                <table border='3' cellspacing='7' width=93%><?php
-                                                                                            echo "<thead>
-            <tr>
-            <th width=5%>S.No.</th>
-            <th width=5%>Images</th>
-            <th width=10%>Book Name</th>
-            <th width=10%>Book Title</th>
-            <th width=10%>Author Name</th>
-            <th width=10%>Book type</th>
-            <th width=10%>Book Addition</th>
-            <th width=20%>Description</th>
-            <th width=18%>Operation</th>
-        </tr>
-        </thead>";
-        while ($result = mysqli_fetch_assoc($result)) {
-        $a = 1;
-        echo "<tbody>
-        <tr>
-        <td>$a</td>
-        <td><img src='" . $result['img_upd'] . "' height='100px'></td>
-        <td>" . $result['Bname'] . "</td>
-        <td>" . $result['Btitle'] . "</td>
-        <td>" . $result['Aname'] . "</td>
-        <td>" . $result['Btype'] . "</td>
-        <td>" . $result['BAddition'] . "</td>
-        <td> " . $result['Description'] . "</td>
-        
-        <td><a href='Switch.php?id=$result[id]'><input type='submit' value='Update' class='btn btn-success'></a>
+if (isset($_GET['sort_alphabet'])) {
+    if ($_GET['sort_alphabet'] == 'a-z') {
+        $sort_option = "ASC";
+    } elseif ($_GET['sort_alphabet'] == 'z-a') {
+        $sort_option = "DESC";
+    }
+}
 
-        <a href='delete.php?id=$result[id]'><input type='submit' value='Delete' class='btn btn-danger' onclick='return checkdelete()'></a>
-
-        <a href='view.php?id=$result[id]'><input type='submit' value='View' class='btn btn-info'> </a>
-        </td>
-
-        </tr>
-        <tbody>";
-                $a++;
-                                }
-                                ?></table><?php
-                            } else {
-                                echo "<h2 class = text-danger>Data Not Found</h2>";
-                            }
-                        }
-                    }
-
-                    if (isset($_GET['sort_alphabet'])) {
-                        if ($_GET['sort_alphabet'] == 'a-z') {
-                            $sort_option = "ASC";
-                        } elseif ($_GET['sort_alphabet'] == 'z-a') {
-                            $sort_option = "DESC";
-                        }
-                    }
-
-                    if (isset($_GET['page'])) {
+if (isset($_GET['page'])) {
                         $page = $_GET['page'];
                     } else {
                         $page = 1;
@@ -161,7 +111,7 @@ include('Details.php');
 
                     $startinglimit = ($page - 1) * $numberPages;
 
-                    $sql = "SELECT * FROM library ORDER BY Bname $sort_option LIMIT $startinglimit,$numberPages";
+                    $sql = "SELECT * FROM library WHERE id like '%$search%' Or Bname like '%$search%' Or Aname like '%$search%' ORDER BY Bname $sort_option LIMIT $startinglimit,$numberPages ";
                     $data = mysqli_query($con, $sql);
                     if ($total != 0) {
                         ?>
@@ -179,9 +129,9 @@ include('Details.php');
                     <th width=18%>Operation</th>
                 </tr>
             <?php
-                                                                $a = 1;
-                        while ($result = mysqli_fetch_assoc($data)) {
-                            echo "<tr>
+        $a = 1;
+        while ($result = mysqli_fetch_assoc($data)) {
+        echo "<tr>
                     <td>$a</td>
                     <td><img src='" . $result['img_upd'] . "' height='100px'></td>
                     <td>" . $result['Bname'] . "</td>
